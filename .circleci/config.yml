@@ -11,7 +11,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "53:7e:7d:cb:cc:d9:a6:f5:07:7d:21:75:89:49:ef:14"
+            - "a3:bd:0e:5d:8b:99:f1:7f:ea:f9:2f:43:ad:74:1b:9b"
       - run: apk add --update ansible
       - run: ansible-playbook main-remote.yml -i inventory
 
