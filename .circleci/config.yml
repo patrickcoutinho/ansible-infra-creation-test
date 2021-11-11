@@ -12,7 +12,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "53:7e:7d:cb:cc:d9:a6:f5:07:7d:21:75:89:49:ef:14"
-      - run: python -m pip install --user ansible
+      - run: apk add --update ansible
       - run: ansible-playbook main-remote.yml -i inventory
 
 workflows:
