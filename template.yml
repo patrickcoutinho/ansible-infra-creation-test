@@ -1,6 +1,6 @@
 # Exercise - Ansible Infra
 AWSTemplateFormatVersion: 2010-09-09
-Description: ND9991 C3 L4
+Description: Ansible Infra - Patrick Coutinho
 Resources:
   EC2Instance:
     Type: "AWS::EC2::Instance"
