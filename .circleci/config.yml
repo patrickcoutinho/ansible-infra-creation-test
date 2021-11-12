@@ -10,8 +10,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints:
-            - "05:f8:55:c8:2e:f3:f5:39:bb:1c:96:82:16:90:b9:88"
+          fingerprints: ["05:f8:55:c8:2e:f3:f5:39:bb:1c:96:82:16:90:b9:88"]
       - run: apk add --update ansible
       - run: ansible-playbook main-remote.yml -i inventory
 
