@@ -3,7 +3,28 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
 
+commands:
+  destroy_environment:
+    steps:
+      - run:
+          name: Destroy environment
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+
 jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create Cloudformation Stack
+          command: |
+            aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
+              --region us-east-1
   configure-server:
     docker:
       - image: python:3.7-alpine3.11
@@ -24,23 +45,28 @@ jobs:
     docker:
       - image: alpine:latest
     steps:
-      - run: apk add --update curl
       - run:
-          name: smoke test
-          command: |
-            URL="http://54.175.148.51:3000"
-            # Test if website exists
-            if curl -s --head ${URL} 
-            then
-              return 0
-            else
-              return 1
-            fi
+          name: Test job
+          # Fail the job intentionally to simulate an error.
+          command: return 1
+      - destroy_environment
+      # - run: apk add --update curl
+      # - run:
+      #     name: smoke test
+      #     command: |
+      #       URL="http://54.175.148.51:3000"
+      #       # Test if website exists
+      #       if curl -s --head ${URL} 
+      #       then
+      #         return 0
+      #       else
+      #         return 1
+      #       fi
 
 workflows:
   ansible-workflow:
     jobs:
-      - configure-server
+      # - configure-server
       - smoke-test:
           requires:
             - configure-server
