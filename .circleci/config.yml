@@ -16,7 +16,7 @@ jobs:
           command: apk add --update ansible openssh
       - run:
           name: Add server to known hosts
-          command: ssh-keyscan -H 3.93.167.226 >> ~/.ssh/known_hosts
+          command: ssh-keyscan -H 34.224.62.199 >> ~/.ssh/known_hosts
       - run:
           name: Configure server
           command: ansible-playbook main-remote.yml -i inventory
