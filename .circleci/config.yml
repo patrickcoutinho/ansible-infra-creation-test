@@ -74,7 +74,8 @@ jobs:
             aws cloudformation deploy \
             --template-file bucket.yml \
             --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
-            --parameter-overrides MyBucketName="mybucket-${CIRCLE_WORKFLOW_ID:0:7}"
+            --parameter-overrides MyBucketName="mybucket-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --region us-east-1
       - run: aws s3 cp index2.html s3://mybucket-${CIRCLE_WORKFLOW_ID:0:7}/index.html
   get_last_deployment_id:
     docker:
@@ -87,7 +88,8 @@ jobs:
           command: |
             aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-            --no-paginate --output text > ~/textfile.txt
+            --no-paginate --output text > ~/textfile.txt \
+            --region us-east-1
       - persist_to_workspace:
           root: ~/
           paths: 
@@ -103,7 +105,8 @@ jobs:
             aws cloudformation deploy \
             --template-file cloudfront.yml \
             --stack-name production-distro \
-            --parameter-overrides PipelineID="mybucket-${CIRCLE_WORKFLOW_ID:0:7}"
+            --parameter-overrides PipelineID="mybucket-${CIRCLE_WORKFLOW_ID:0:7}" |
+            --region us-east-1
   clean_up_old_front_end:
     docker:
       - image: amazon/aws-cli
